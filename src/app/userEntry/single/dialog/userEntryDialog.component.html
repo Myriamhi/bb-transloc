@@ -1,0 +1,9 @@
+
+<!-- <app-userEntry [showBackButton]="false"></app-userEntry> -->
+<!-- <app-userEntry></app-userEntry> -->
+
+
+<app-userEntry [isDialog]=true [search]="search" (saved)="saved()" (close)="closeDialog($event)">
+</app-userEntry>
+<!-- <app-userEntry [search]="search" [fetchedQuotes]="[fetchedQuote]" (saved)="saved()">
+</app-userEntry> -->

@@ -1,0 +1,9 @@
+
+<!-- <app-team [showBackButton]="false"></app-team> -->
+<!-- <app-team></app-team> -->
+
+
+<app-team [isDialog]=true [search]="search" (saved)="saved()" (close)="closeDialog($event)">
+</app-team>
+<!-- <app-team [search]="search" [fetchedQuotes]="[fetchedQuote]" (saved)="saved()">
+</app-team> -->

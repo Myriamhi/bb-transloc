@@ -1,0 +1,119 @@
+<div class="container">
+  <app-header-title [showBack]="showBack" [title]="'UserEntrys'" (saved)="saved($event)" [search]="{userId: search.userId, quoteId: search.quoteId}" [typeObj]="'userEntry'"></app-header-title>
+
+  <div class="row">
+    <div class="col-3">
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="search.startDate" placeholder="Date de début">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker2" [(ngModel)]="search.endDate" placeholder="Date de fin">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <button mat-button (click)="downloadFile()">CSV</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th class="centre tdunder">
+              {{'Name' | translate}}
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              Tournée
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              Date
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              Bordereau
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              PPI
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              Emport
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              AV
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              DRP
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              DRC
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+            <th class="centre tdunder">
+              RDI
+              <app-sort (orderBy)="orderBy($event)" [search]="search" [filedToOrder]="'type'"></app-sort>
+            </th>
+
+          </tr>
+        </thead>
+        <tbody class="clienttbl">
+          <tr *ngFor="let userEntry of fetchedUserEntrys" (click)="openDialogPaiement(userEntry._id)" routerLinkActive="active">
+            <td class="centre tdunder">
+              <div *ngFor="let user of userEntry.users">
+                {{user.email}} {{user.name}}
+              </div>
+            </td>
+            <td class="centre tdunder">
+              <div *ngFor="let tour of userEntry.tours">
+                {{tour.nameTour}}
+              </div>
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.dateUserEntry | date:'shortDate'}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info1}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info2}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info3}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info4}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info5}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info6}}
+            </td>
+            <td class="centre tdunder">
+              {{userEntry.info7}}
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+      <div>
+        <mat-paginator *ngIf="paginationData.totalItems>paginationData.itemsPerPage" [length]="paginationData.totalItems" [pageIndex]="paginationData.currentPage-1" [pageSize]="paginationData.itemsPerPage" (page)="getPage($event.pageIndex*1+1)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+<app-loadingInApp [loading]="loading"></app-loadingInApp>

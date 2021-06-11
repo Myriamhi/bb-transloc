@@ -1,0 +1,98 @@
+<div class="container">
+  <app-header-title [showBack]=1 [isDialog]="isDialog" [title]="'Product'" [icon]="'dvr'"></app-header-title>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>list</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{'Product' | translate}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngIf="itemSteps.length">
+        <div>{{'Category' | translate}}</div>
+        <div>
+          <button (click)="changeCascade(i, -1, -1)" *ngFor="let itemStep of itemSteps;let i=index;" type="button" class="prodbtn" [ngClass]="{'prodbtnsel': i==selectedIndex0, '': i!=selectedIndex0}">
+          {{itemStep.categ}}
+        </button>
+      </div>
+
+        <br>
+        <div *ngIf="selectedIndex0>=0 && itemSteps[selectedIndex0].subCateg.length">
+          <div>{{'SubCategory' | translate}}</div>
+          <div>
+            <button (click)="changeCascade(selectedIndex0, i, -1)" *ngFor="let itemStep of itemSteps[selectedIndex0].subCateg; let i=index;" type="button" class="prodbtn" [ngClass]="{'prodbtnsel': i==selectedIndex1, '': i!=selectedIndex1}">
+            {{itemStep.categ}}
+          </button>
+          </div>
+        </div>
+        <br>
+        <div *ngIf="selectedIndex1>=0 && itemSteps[selectedIndex0].subCateg[selectedIndex1].subCateg.length">
+          <div>{{'Product Type' | translate}}</div>
+          <div>
+            <button (click)="changeCascade(selectedIndex0, selectedIndex1, i)" *ngFor="let itemStep of itemSteps[selectedIndex0].subCateg[selectedIndex1].subCateg;let i=index;" type="button" class="prodbtn" [ngClass]="{'prodbtnsel': i==selectedIndex2, '': i!=selectedIndex2}">
+            {{itemStep.categ}}
+          </button>
+          </div>
+        </div>
+      </div>
+      <form [formGroup]="myForm">
+        <div class="row">
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field>
+              <input matInput type="text" formControlName="referenceName" [(ngModel)]="fetchedProduct.details.referenceName" placeholder="{{'Product Name' | translate}}">
+            </mat-form-field>
+            <mat-form-field>
+              <textarea matInput formControlName="description" placeholder="{{'description' | translate}}" [(ngModel)]="fetchedProduct.details.description" matAutosizeMinRows="2" matAutosizeMaxRows="5">
+              </textarea>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="number" formControlName="costPrice" [(ngModel)]="fetchedProduct.details.price.costPrice" placeholder="{{'Cost Price' | translate}}">
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput type="number" formControlName="sellingPrice" [(ngModel)]="fetchedProduct.details.price.sellingPrice" placeholder="{{'Selling Price' | translate}}">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6 col-sm-12">
+            <mat-form-field>
+              <input matInput type="text" formControlName="unit" [(ngModel)]="fetchedProduct.details.unit" placeholder="{{'Unit' | translate}}">
+            </mat-form-field>
+          </div>
+        </div>
+        <mat-action-row>
+          <div class="spaceBetween width100perc">
+            <div>
+              <button *ngIf="fetchedProduct._id" mat-mini-fab color="warn" (click)="openDialogDelete()">
+                <mat-icon aria-label="Next">delete</mat-icon>
+              </button>
+            </div>
+            <button mat-mini-fab color="primary" (click)="saveAndNextStep()">
+              <mat-icon aria-label="Next">forward</mat-icon>
+            </button>
+          </div>
+        </mat-action-row>
+
+      </form>
+    </mat-expansion-panel>
+    <mat-expansion-panel *ngIf="fetchedProduct._id" [expanded]="step === 1" (opened)="setStep(1)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>brush</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{'Pictures' | translate}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-picture [forms]="fetchedProduct.forms" [showPagination]=false>
+      </app-picture>
+      <mat-action-row>
+        <button mat-mini-fab color="primary" (click)="saveAndNextStepAndClose()">
+          <mat-icon aria-label="Next">forward</mat-icon>
+        </button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+  </mat-accordion>
+
+</div>

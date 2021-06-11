@@ -1,0 +1,7 @@
+
+<!-- <app-user-calendar [showBackButton]="false"></app-user-calendar> -->
+<!-- <app-user-calendar></app-user-calendar> -->
+
+
+<app-user-calendar (saved)="saved()" (deleted)="deleted()" [search]="search" [fetchedUserCalendar]="fetchedUserCalendar">
+</app-user-calendar>

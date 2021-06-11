@@ -1,0 +1,32 @@
+<div class="container">
+  <app-header-title [isDialog]=false [showBack]=-1 [title]="'Rights'" (saved)="saved($event)" [search]="search" [typeObj]="'right'"></app-header-title>
+  <div class="row">
+    <div class="p-2">
+      <input class="form-control margebasse col-lg-12" type="text" name="Search" placeholder="Rechercher" [(ngModel)]="search.search" (ngModelChange)="searchRights()">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-4">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th class="centre tdunder">Name</th>
+          </tr>
+        </thead>
+        <tbody class="clienttbl">
+          <tr *ngFor="let right of fetchedRights" [routerLink]="['/right/' + right._id]" routerLinkActive="active">
+            <td class="centre tdunder">{{right.detailRight.nameRight}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div>
+        <mat-paginator *ngIf="paginationData.totalItems>paginationData.itemsPerPage"  [length]="paginationData.totalItems" [pageSize]="paginationData.itemsPerPage" (page)="getPage($event.pageIndex*1+1)">
+        </mat-paginator>
+
+      </div>
+    </div>
+  </div>
+</div>
+<app-loadingInApp [loading]="loading"></app-loadingInApp>

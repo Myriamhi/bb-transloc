@@ -1,0 +1,9 @@
+
+<!-- <app-tour [showBackButton]="false"></app-tour> -->
+<!-- <app-tour></app-tour> -->
+
+
+<app-tour [isDialog]=true [search]="search" (saved)="saved()" (close)="closeDialog($event)">
+</app-tour>
+<!-- <app-tour [search]="search" [fetchedQuotes]="[fetchedQuote]" (saved)="saved()">
+</app-tour> -->

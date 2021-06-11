@@ -1,0 +1,87 @@
+<div class="container">
+  <app-header-title [showBack]=1 [isDialog]="isDialog" [title]="'Payment'" [icon]="'credit_card'"></app-header-title>
+  <mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>attach_money</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{'Paiement' | translate}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <form [formGroup]="myForm" novalidate (ngSubmit)="save()">
+        <div class="row">
+          <div class="col-12 col-lg-6">
+            <app-autocomplete class="mb8 bn" [canDelete]=true [typeAutocomplete]="'user'" [search]="{paiementQuoteId: search.paiementQuoteId, isExternalUser: true, userId:search.userId, quoteId:search.quoteId}" [canDelete]="true" [title]="'Customer'" [singleChoice]="true" [arrayContent]="fetchedPaiementQuote.userDebiteds" (clearAutocomplete)="clearAutocompleteClient()"
+              (getResultAutocomplete)="selectUserDebited($event[0])" (autocompleteAfterNgChanges)="autocompleteAfterNgChangesUser($event)">
+            </app-autocomplete>
+          </div>
+          <div class="col-12 col-lg-6">
+            <app-autocomplete *ngIf="fetchedPaiementQuote.userDebiteds.length" class="mb8 bn" [canDelete]=true [typeAutocomplete]="'quote'" [search]="search" [canDelete]="true" [title]="'Intervention'" [singleChoice]="true" [arrayContent]="fetchedPaiementQuote.quotes"
+              (getResultAutocomplete)="selectQuote($event[0])" (autocompleteAfterNgChanges)="autocompleteAfterNgChanges($event)">
+            </app-autocomplete>
+          </div>
+          <div class="col-12 col-lg-6">
+            <mat-form-field>
+              <input matInput type="number" formControlName="amount" [(ngModel)]="fetchedPaiementQuote.amount" placeholder="{{'Amount' | translate}}">
+            </mat-form-field>
+          </div>
+          <div class="col-12 col-lg-6">
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker" placeholder="{{'Paiement Date' | translate}}" [ngModelOptions]="{standalone: true}" [(ngModel)]="fetchedPaiementQuote.datePaiement">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <mat-action-row>
+        <div class="spaceBetween width100perc">
+          <div>
+            <button *ngIf="fetchedPaiementQuote._id" mat-mini-fab color="warn" (click)="openDialogDelete()">
+              <mat-icon aria-label="delete">delete</mat-icon>
+            </button>
+          </div>
+          <button mat-mini-fab color="primary" (click)="nextStep()">
+            <mat-icon aria-label="Next">forward</mat-icon>
+          </button>
+        </div>
+      </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel *ngIf="fetchedPaiementQuote._id && fetchedPaiementQuote.amount" [expanded]="step === 1" (opened)="setStep(1)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>credit_card</mat-icon>
+        </mat-panel-title>
+        <mat-panel-description>
+          {{'Payment method' | translate}}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div *ngIf="fetchedPaiementQuote.isPaid">
+        <mat-radio-group *ngIf="fetchedPaiementQuote.stripe.charge.status !=='succeeded'" [ngModelOptions]="{standalone: true}" [(ngModel)]="fetchedPaiementQuote.type">
+          <mat-radio-button class="paiementsTypes" *ngFor="let n of paiementsTypes" [value]="n.value">{{n.label | translate}}</mat-radio-button>
+          <mat-radio-button *ngIf="accountConnectStripe.id" [value]="'stripe'">{{'Card' | translate}}</mat-radio-button>
+        </mat-radio-group>
+        <div *ngIf="fetchedPaiementQuote.type=='stripe' && fetchedPaiementQuote._id">
+          <mat-card *ngIf="fetchedPaiementQuote.stripe.charge.status !=='succeeded'">
+            <app-paiement-card [hideAddress]=true [newCard]="newCard"></app-paiement-card>
+          </mat-card>
+          <mat-card *ngIf="fetchedPaiementQuote.stripe.charge.status ==='succeeded'">
+            <mat-icon color="accent">done</mat-icon>
+            {{fetchedPaiementQuote.stripe.charge.amount / 100}} {{fetchedPaiementQuote.stripe.charge.currency}} ({{fetchedPaiementQuote.stripe.charge.created * 1000 | date: 'dd/MM/yyyy'}})
+            <p>{{'Funding'| translate}}: {{fetchedPaiementQuote.stripe.charge.source.funding}}</p>
+          </mat-card>
+        </div>
+      </div>
+      <mat-action-row>
+        <button mat-mini-fab mat-mini-fab color="primary" *ngIf="fetchedPaiementQuote.type==='stripe' && fetchedPaiementQuote.stripe.charge.status !=='succeeded'" (click)="payByCardConnect()">
+          <mat-icon>credit_card</mat-icon>
+        </button>
+        <button *ngIf="fetchedPaiementQuote.type!=='stripe'" mat-mini-fab color="primary" (click)="closeDialog()">
+          <mat-icon aria-label="save">check_circle</mat-icon>
+        </button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>

@@ -1,0 +1,50 @@
+import { Validators, FormControl } from '@angular/forms';
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+
+export class Search {
+  // isQuoteAssignedToMe = false;
+  orderBy = '';
+  search = '';
+  quoteType = '';
+  quoteId = '';
+  userId = '';
+  tourId = '';
+  clientId = '';
+  userEntryId = '';
+  paiementQuoteId = '';
+  endDate: Date = new Date();
+  startDate: Date = new Date();
+  assignedToId = '';
+  projectId = '';
+  teamId = '';
+  isExternalUser = true;
+  isExpense = false;
+  typeQuote = '';
+  isInDialog = false;
+  year = 0;
+  isFromAutocomplete = false;
+  isAdmin = false;
+  // isSigned = false;
+  statusQuote = '';
+};
+
+
+
+export class PaginationData {
+  currentPage: number = 1;
+  itemsPerPage = 0;
+  totalItems = 0;
+};
+
+
+
+
+
+
+export class CustomFormControls {
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.minLength(3),
+    Validators.pattern(EMAIL_REGEX)])
+}

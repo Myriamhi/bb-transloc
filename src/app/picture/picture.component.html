@@ -1,0 +1,15 @@
+  <app-user-form-list *ngIf="showPictures" [itemsPerPage]=8 [deletePicture]="deletePicture" [fetchedForms]="forms" [showPagination]="showPagination" (removeForm)="removeForm($event)" (onPassForm)="onGetForm($event)">
+  </app-user-form-list>
+  <div class="tac" *ngIf="!singleForm || forms.length<1">
+    <div *ngIf="addPicture">
+      <app-form *ngIf="!openLibrairy" [openCameraStraight]="openCameraStraight" (onPassForm)="onPassForm($event)"></app-form>
+      <div *ngIf="openLibrairy">
+        <div>
+            <mat-icon class="bigIcon pointer" (click)="openDialog('img')" color="primary">cloud_upload</mat-icon>
+          <div>
+            {{'Add document' | translate}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

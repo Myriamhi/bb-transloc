@@ -1,0 +1,7 @@
+<div class="row">
+  <div class="col-lg-4">
+    <app-autocomplete [typeAutocomplete]="'user'" [search]="{isExternalUser: false}" [canCreateNewObj]=false [title]="'Repairer'" [singleChoice]="'true'" [arrayContent]="searchData.fetchedUserSearchs" (getResultAutocomplete)="selectUserSearch()" (clearAutocomplete)="removeUserSearch()">
+    </app-autocomplete>
+  </div>
+
+</div>
